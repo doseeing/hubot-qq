@@ -23,35 +23,35 @@ function getUserHome() {
     return crypto.createHash('md5').update(str.toString()).digest('hex');
   };
 
-    var prepare_login = function(callback) {
-        client.update_cookies('RK=OfeLBai4FB; ptcz=ad3bf14f9da2738e09e498bfeb93dd9da7540dea2b7a71acfb97ed4d3da4e277; pgv_pvi=911366144; ptisp=ctc; pgv_info=ssid=s5714472750; pgv_pvid=1051433466; qrsig=hJ9GvNx*oIvLjP5I5dQ19KPa3zwxNI62eALLO*g2JLbKPYsZIRsnbJIxNe74NzQQ;'.split(' '));
-        var url = 'https://ui.ptlogin2.qq.com/cgi-bin/login?daid=164&target=self&style=16&mibao_css=m_webqq&appid=501004106&enable_qlogin=0&no_verifyimg=1&s_url=http%3A%2F%2Fw.qq.com%2Fproxy.html&f_url=loginerroralert&strong_login=1&login_state=10&t=20131024001';
+  var prepare_login = function(callback) {
+      client.update_cookies('RK=OfeLBai4FB; ptcz=ad3bf14f9da2738e09e498bfeb93dd9da7540dea2b7a71acfb97ed4d3da4e277; pgv_pvi=911366144; ptisp=ctc; pgv_info=ssid=s5714472750; pgv_pvid=1051433466; qrsig=hJ9GvNx*oIvLjP5I5dQ19KPa3zwxNI62eALLO*g2JLbKPYsZIRsnbJIxNe74NzQQ;'.split(' '));
+      var url = 'https://ui.ptlogin2.qq.com/cgi-bin/login?daid=164&target=self&style=16&mibao_css=m_webqq&appid=501004106&enable_qlogin=0&no_verifyimg=1&s_url=http%3A%2F%2Fw.qq.com%2Fproxy.html&f_url=loginerroralert&strong_login=1&login_state=10&t=20131024001';
 
-        return client.url_get(url, function(err, resp, body){
-            return callback([]);
-        });
-    };
+      return client.url_get(url, function(err, resp, body){
+          return callback([]);
+      });
+  };
 
-    var check_qq_verify = function(callback) {
-        var options = {
-            protocol: 'https:',
-            host: 'ssl.ptlogin2.qq.com',
-            path: '/ptqrlogin?webqq_type=10&remember_uin=1&login2qq=1&aid=501004106&u1=http%3A%2F%2Fw.qq.com%2Fproxy.html%3Flogin2qq%3D1%26webqq_type%3D10&ptredirect=0&ptlang=2052&daid=164&from_ui=1&pttype=1&dumy=&fp=loginerroralert&action=0-0-' + (Math.random() * 900000 + 1000000) +'&mibao_css=m_webqq&t=undefined&g=1&js_type=0&js_ver=10141&login_sig=&pt_randsalt=0',
-            headers: {
-                'Cookie': client.get_cookies_string(),
-                'Referer':'https://ui.ptlogin2.qq.com/cgi-bin/login?daid=164&target=self&style=16&mibao_css=m_webqq&appid=501004106&enable_qlogin=0&no_verifyimg=1&s_url=http%3A%2F%2Fw.qq.com%2Fproxy.html&f_url=loginerroralert&strong_login=1&login_state=10&t=20131024001'
-            }
-        };
+  var check_qq_verify = function(callback) {
+      var options = {
+          protocol: 'https:',
+          host: 'ssl.ptlogin2.qq.com',
+          path: '/ptqrlogin?webqq_type=10&remember_uin=1&login2qq=1&aid=501004106&u1=http%3A%2F%2Fw.qq.com%2Fproxy.html%3Flogin2qq%3D1%26webqq_type%3D10&ptredirect=0&ptlang=2052&daid=164&from_ui=1&pttype=1&dumy=&fp=loginerroralert&action=0-0-' + (Math.random() * 900000 + 1000000) +'&mibao_css=m_webqq&t=undefined&g=1&js_type=0&js_ver=10141&login_sig=&pt_randsalt=0',
+          headers: {
+              'Cookie': client.get_cookies_string(),
+              'Referer':'https://ui.ptlogin2.qq.com/cgi-bin/login?daid=164&target=self&style=16&mibao_css=m_webqq&appid=501004106&enable_qlogin=0&no_verifyimg=1&s_url=http%3A%2F%2Fw.qq.com%2Fproxy.html&f_url=loginerroralert&strong_login=1&login_state=10&t=20131024001'
+          }
+      };
 
-        return client.url_get(options, function(err, resp, body){
-            var ret = body.match(/\'(.*?)\'/g).map(function(i) {
-                var last = i.length - 2;
-                return i.substr(1, last);
-            });
-            //console.log(ret);
-            return callback(ret);
-        });
-    };
+      return client.url_get(options, function(err, resp, body){
+          var ret = body.match(/\'(.*?)\'/g).map(function(i) {
+              var last = i.length - 2;
+              return i.substr(1, last);
+          });
+          //console.log(ret);
+          return callback(ret);
+      });
+  };
 
   var get_qr_code = function(qq, host, port, callback) {
       var url = "https://ssl.ptlogin2.qq.com/ptqrshow?appid=501004106&e=0&l=M&s=5&d=72&v=4&t=" + Math.random();
@@ -146,6 +146,7 @@ function getUserHome() {
       }
     }, form, function(err, resp, body) {
       //console.log(body);
+
       var ret = JSON.parse(body);
       return callback(ret);
     });
@@ -204,7 +205,7 @@ function getUserHome() {
   }
 
   var wait_scan_qrcode = function(callback) {
-    log.info("登录 step1 等待二维码校验结果");
+    //log.info("登录 step1 等待二维码校验结果");
     return check_qq_verify(function(ret) {
         var retcode = parseInt(ret[0]);
         if( retcode === 0 && ret[2].match(/^http/)) {
@@ -232,15 +233,16 @@ function getUserHome() {
 
       log.info("登录 step0.5 获取二维码");
       return get_qr_code(qq, opt.host, opt.port, function(error) {
-          if (process.platform === 'darwin') {
-              log.notice("请用 手机QQ 扫描该二维码");
-              var file_path = Path.join(getUserHome(), ".tmp", "qrcode.jpg");
-              require('child_process').exec('open ' + file_path);
+        var file_path = Path.join(getUserHome(), ".tmp", "qrcode.jpg");
+          if (process.platform === 'darwin3') {
+            log.notice("请用 手机QQ 扫描该二维码");
+            require('child_process').exec('open ' + file_path);
+            return wait_scan_qrcode(callback);
           } else {
-              log.notice("请用 手机QQ 扫描该地址的二维码图片->", "http://" + opt.host + ":" + opt.port);
+            print_terminal_qrcode(file_path, function(error){
+              wait_scan_qrcode(callback);
+            });
           }
-
-          return wait_scan_qrcode(callback);
       });
   }
 
@@ -251,35 +253,59 @@ function getUserHome() {
       @callback( cookies , auth_options ) if login success
    */
 
-    var login = function(options, callback) {
-        var opt = options;
-        var qq = opt.account, pass = opt.password;
-        return prepare_login(function(result) {
-            log.info('登录 step0 - 登录方式检测');
-            return check_qq_verify(function(ret) {
-                //console.log(ret);
-                var need_verify = parseInt(ret[0]), verify_code = ret[1], bits = ret[2], verifySession = ret[3];
-                if (need_verify == 65 || need_verify == 66) {
-                    return auth_with_qrcode(opt, callback);
-                } else {
-                    console.log(result);
-                }
-            });
-        });
-    };
+  var login = function(options, callback) {
+      var opt = options;
+      var qq = opt.account, pass = opt.password;
+      return prepare_login(function(result) {
+          log.info('登录 step0 - 登录方式检测');
+          return check_qq_verify(function(ret) {
+              //console.log(ret);
+              var need_verify = parseInt(ret[0]), verify_code = ret[1], bits = ret[2], verifySession = ret[3];
+              if (need_verify == 65 || need_verify == 66) {
+                  return auth_with_qrcode(opt, callback);
+              } else {
+                  console.log(result);
+              }
+          });
+      });
+  };
 
-    module.exports = {
-        prepare_login: prepare_login,
-        check_qq_verify: check_qq_verify,
-        get_qr_code: get_qr_code,
-        get_ptwebqq: get_ptwebqq,
-        get_vfwebqq: get_vfwebqq,
-        login_token: login_token,
-        get_buddy: get_buddy,
-        finish_verify_code: finish_verify_code,
-        auth_with_qrcode: auth_with_qrcode,
-        auto_login: auto_login,
-        login: login,
-    };
+  function print_terminal_qrcode(file_path, callback) {
+    var Canvas = require('canvas')
+      , Image = Canvas.Image
+      , qrcode = require('jsqrcode')(Canvas)
+
+    var filename = file_path
+
+    var image = new Image()
+
+    image.onload = function(){
+      var result;
+      try{
+        result = qrcode.decode(image);
+        var qrcodeTerm = require('qrcode-terminal');
+        qrcodeTerm.generate(result);
+        callback(null);
+      }catch(e){
+        callback('unable to read qr code')
+      }
+    }
+    image.src = filename
+  }
+
+
+  module.exports = {
+      prepare_login: prepare_login,
+      check_qq_verify: check_qq_verify,
+      get_qr_code: get_qr_code,
+      get_ptwebqq: get_ptwebqq,
+      get_vfwebqq: get_vfwebqq,
+      login_token: login_token,
+      get_buddy: get_buddy,
+      finish_verify_code: finish_verify_code,
+      auth_with_qrcode: auth_with_qrcode,
+      auto_login: auto_login,
+      login: login,
+  };
 
 }).call(this);

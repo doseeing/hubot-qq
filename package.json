@@ -25,6 +25,9 @@
   },
 
   "dependencies": {
+    "canvas": "*",
+    "jsqrcode": "git+https://github.com/vicapow/jsqrcode.git",
+    "qrcode-terminal": "^0.11.0",
     "request": "*",
     "log": ">= 1.4.0",
     "js-yaml" : ">= 3.0.0"
